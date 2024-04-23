@@ -1,8 +1,10 @@
-## k8s Mutating Admission Webhook Demo
-A Python + FastAPI developed k8s Mutating Admission Webhook demo that automatically adds the label foo=bar to pods.
+[中文](./README-zh.md)
+
+## k8s Mutating Admission Webhook Demo 
+A Python + FastAPI developed k8s Mutating Admission Webhook demo that automatically adds the label foo=bar to pods.  
 
 ### Verification
-1、Use minikube to start a local k8s cluster:
+1、Use minikube to start a local k8s cluster
 ```
 $ minikube start
 ```
