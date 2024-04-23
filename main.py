@@ -41,7 +41,8 @@ async def mutate(req=Body(...)):
 
     logging.info(
         "req_uid=%s, Received a mutation request: %s",
-        (req_uid, json.dumps(req, indent=2)),
+        req_uid,
+        json.dumps(req, indent=2),
     )
     # 添加标签
     json_patch = f"""[{{"op": "add", "path": "/metadata/labels/{label_k}", "value": "{label_v}"}}]"""
@@ -55,12 +56,14 @@ async def mutate(req=Body(...)):
     # 如果存在该标签，就跳过
     if label_k in req_pod["metadata"]["labels"]:
         logging.info(
-            "req_uid=%s, Pod already has %s label. Skip patching.", (req_uid, label_k)
+            "req_uid=%s, Pod already has %s label. Skip patching.", req_uid, label_k
         )
         resp = Response(uid=req_uid, allowed=True)
     else:
         # 注意mutatingWebhook 拿不到metadata.name和pod uid信息
-        logging.info("req_uid=%s, Patching pod with %s = %s.", (req_uid, label_k, label_v))
+        logging.info(
+            "req_uid=%s, Patching pod with %s = %s.", req_uid, label_k, label_v
+        )
         resp = Response(
             uid=req_uid,
             allowed=True,
