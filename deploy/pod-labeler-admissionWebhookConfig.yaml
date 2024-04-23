@@ -1,0 +1,43 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: "pod-labeler.example.com"
+webhooks:
+- name: "pod-labeler.example.com"
+  rules:
+  - apiGroups:   [""]
+    apiVersions: ["v1"]
+    operations:  ["CREATE"]
+    resources:   ["pods"]
+    scope:       "Namespaced"
+  clientConfig:
+    url: https://192.168.1.1:8000/mutate
+    # service:
+    #   namespace: "example-namespace"
+    #   name: "example-service"
+    # Replace caBundle of you own
+    caBundle: |
+      LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURVVENDQWptZ0F3SUJBZ0lVYmwyWkxIWGRKWGpL
+      U1pOTTNPNW1BL0k5RGRJd0RRWUpLb1pJaHZjTkFRRUwKQlFBd09ERUxNQWtHQTFVRUJoTUNRVlV4S1RB
+      bkJnTlZCQU1NSUd0MVltVnlibVYwWlhNdGJYVjBZWFJwYm1jdApkMlZpYUc5dmF5MWtaVzF2TUI0WERU
+      STBNRFF5TXpBek1qVXhORm9YRFRJMU1EUXlNekF6TWpVeE5Gb3dPREVMCk1Ba0dBMVVFQmhNQ1FWVXhL
+      VEFuQmdOVkJBTU1JR3QxWW1WeWJtVjBaWE10YlhWMFlYUnBibWN0ZDJWaWFHOXYKYXkxa1pXMXZNSUlC
+      SWpBTkJna3Foa2lHOXcwQkFRRUZBQU9DQVE4QU1JSUJDZ0tDQVFFQXVQNys4bHpKLzZDaQphT0k1ZXU0
+      YXcyamt5TFhQNXpUSktWTUZCSTZBbXRaZmorT1R6eThNd0hVaDFlZ1k2SGNZRmpHY2F0bnhZSk9iCjQ4
+      aFBMc2d4MTBhQUhDKzZOSnBJT0JERHlIWkNMRFREbThJUzZuYkh4QldUS1JNdWtYZXVBS2tDR0hDYXNx
+      UHQKb1QxVTJPODNnb3VCNnREeEhlVVVzck8xK3pubFNob0JXNXAwdE5CUmY4NHB2eTV6RmhkU1VyQUQz
+      VDVneFNjNQpudFlCbndaVzVTK1hDQ0RFM0diN2czcGFzU1cyQUVXellSUWJyMmFFK3c5K1JNQXdsL1E2
+      UkVxU3g0dEVqb1ozCkZZKzJKcWdmeU5MWU5EM05yNEFLMGVxNko2c3Fmamc0OFF2WWZRVklpUHltM3E2
+      M2xaSVNLK0ZyK05MTlpuVlMKNm52V1dnV3BZd0lEQVFBQm8xTXdVVEFkQmdOVkhRNEVGZ1FVWEwvZnNh
+      RzhsckFycnBkRUdpN0I1N3RBN3E4dwpId1lEVlIwakJCZ3dGb0FVWEwvZnNhRzhsckFycnBkRUdpN0I1
+      N3RBN3E4d0R3WURWUjBUQVFIL0JBVXdBd0VCCi96QU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFwN1R1
+      QUx1WjU4M0Y0TXFsZTcvRnZZdXh2MHRkWnB4UitPYkEKcTNZa0NXSCt4Wm42OTVhMnZTZHVwTVhnSmhk
+      S1JBN0JOUi9qc05Ra2RRaEt2Z1prM1NaT1J2aFphaEVibnAwbwpBaURuU0pJSzBkcEV0dm5hdXMyZkxL
+      Y1hSazAvcjl1TGZGc21mWk9IRzZtZTFGcUM2ZHp0QzllUTBiUDFDSXJnClF5WUVDMzBoUTVhSXRkK1lu
+      VDFlKyt2WU1sYmU3TWF2VVRuMkN3YnFYemxnSXRQK0FJdjVqRktOTUx0QkxZamkKZ2lkOEtIQWFXamh6
+      TmZKN0tRd2cwS1RQZ0tTb0lNbUJKOHJKTmFTRlJoM0JVZ0lEN0t2UGtoZHQwT0g2VndheApFRnc0Qmdu
+      TEZXU25WTmFJc1F4VDJVVXZaMXFkK1ZTN0pkdm85dm9WOFdudUlQSUhnUT09Ci0tLS0tRU5EIENFUlRJ
+      RklDQVRFLS0tLS0K
+  admissionReviewVersions: ["v1"]
+  sideEffects: None
+  timeoutSeconds: 5
