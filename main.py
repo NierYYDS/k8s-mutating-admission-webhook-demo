@@ -1,3 +1,10 @@
+"""
+Author: NierYYDS
+Date: 2024-04-23 13:37:34
+LastEditTime: 2024-04-23 14:11:33
+FilePath: /k8s-mutating-webhook-demo/main.py
+"""
+
 import base64
 import json
 import logging
@@ -45,7 +52,9 @@ async def mutate(req=Body(...)):
         json.dumps(req, indent=2),
     )
     # 添加标签
-    json_patch = f"""[{{"op": "add", "path": "/metadata/labels/{label_k}", "value": "{label_v}"}}]"""
+    json_patch = (
+        f'[{{"op": "add", "path": "/metadata/labels/{label_k}", "value": "{label_v}"}}]'
+    )
     json_patch = base64.b64encode(json_patch.encode("utf-8"))
 
     req_pod = req["request"]["object"]
