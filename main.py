@@ -1,10 +1,11 @@
 import base64
 import json
 import logging
-import uvicorn
 from typing import Optional
+import uvicorn
 from fastapi import Body, FastAPI
 from pydantic import BaseModel
+
 
 class Response(BaseModel):
     """webhook response核心payload"""
@@ -39,7 +40,8 @@ async def mutate(req=Body(...)):
     req_uid = req["request"]["uid"]
 
     logging.info(
-        f"req_uid={req_uid}, Received a mutation request: {json.dumps(req, indent=2)}"
+        "req_uid=%s, Received a mutation request: %s",
+        (req_uid, json.dumps(req, indent=2)),
     )
     # 添加标签
     json_patch = f"""[{{"op": "add", "path": "/metadata/labels/{label_k}", "value": "{label_v}"}}]"""
@@ -47,18 +49,18 @@ async def mutate(req=Body(...)):
 
     req_pod = req["request"]["object"]
     if req_pod["kind"] != "Pod":
-        logging.error(f"req_uid={req_uid}, This webhook only supports pod mutation.")
+        logging.error("req_uid=%s, This webhook only supports pod mutation.", req_uid)
         return Response(uid=req["request"]["uid"], allowed=False)
 
     # 如果存在该标签，就跳过
     if label_k in req_pod["metadata"]["labels"]:
         logging.info(
-            f"req_uid={req_uid}, Pod already has {label_k} label. Skip patching."
+            "req_uid=%s, Pod already has %s label. Skip patching.", (req_uid, label_k)
         )
         resp = Response(uid=req_uid, allowed=True)
     else:
         # 注意mutatingWebhook 拿不到metadata.name和pod uid信息
-        logging.info(f"req_uid={req_uid}, Patching pod with {label_k} = {label_v}.")
+        logging.info("req_uid=%s, Patching pod with %s = %s.", (req_uid, label_k, label_v))
         resp = Response(
             uid=req_uid,
             allowed=True,
