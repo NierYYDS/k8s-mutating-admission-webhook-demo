@@ -45,4 +45,4 @@ echo
 cat ca.crt | base64 | fold > caBundle.txt
 
 test -d ./certs || mkdir ./certs
-mv ca.crt ca.key ca.srl server.crt server.csr server.key /certs
+mv ca.crt ca.key ca.srl server.crt server.csr server.key ./certs
