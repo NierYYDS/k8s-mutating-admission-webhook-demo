@@ -1,25 +1,25 @@
-## k8s Mutating Admssion Webhook Demo
-Python + FastAPI 开发的k8s Mutating Admssion Webhook Demo,实现给pod自动加上`foo=bar`的label
+## k8s Mutating Admission Webhook Demo
+A Python + FastAPI developed k8s Mutating Admission Webhook demo that automatically adds the label foo=bar to pods.
 
-### 验证
-1、使用minikube在本地启动一个k8s集群
+### Verification
+1、Use minikube to start a local k8s cluster:
 ```
-$ minikube start --image-mirror-country=cn
+$ minikube start
 ```
 
-2、本地启动一个webhook服务
+2、Start a webhook service locally
 ```
-# 创建python虚拟环境
+# Create a python virtual environment
 $ python3 -m venv .venv
 $ source .venv/bin/activate
 $ pip install -r requirements.txt
-# 根据提示输入IP，在./certs生成证书
+# Follow the prompt to enter IP, generate certificates in ./certs
 $ bash gen-certs.sh
-# 启动服务
+# Start the service
 $ python main.py 
 ```
 
-3、修改webhook的配置文件
+3、Modify the webhook configuration file
 ```
 $ cat caBundle.txt
 LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURVVENDQWptZ0F3SUJBZ0lVTkdzZlc2SzQxc2k3
@@ -27,26 +27,26 @@ LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURVVENDQWptZ0F3SUJBZ0lVTkdzZlc2SzQxc2k3
 
 $ vim deploy/pod-labeler-admissionWebhookConfig.yaml
   clientConfig:
-    url: https://192.168.1.1:8000/mutate  # 把这里的IP换成你的本地IP
+    url: https://192.168.1.1:8000/mutate  # Change this IP to your local IP
     caBundle: |
-      # 这里替换成上面的caBundle.txt里面的内容，注意缩进
+      # Replace here with the content from above caBundle.txt, pay attention to indentation
 ```
-        
-4、把admissionWebhookConfig更新到集群
+
+4、Update the admissionWebhookConfig to the cluster
 ```
 $ kubectl apply -f deploy/pod-labeler-admissionWebhook.yaml
 ```
 
-5、创建一个deployment，验证webhook是否生效
+5、Create a deployment to verify if the webhook is effective
 ```
 $ kubectl apply -f deploy/pod-test.yaml
-# deploy里面是没有foo: bar这个label的
+# Inside deploy there isn't the foo: bar label
 $ kubectl get deploy -oyaml |grep "labels:" -A 2
         labels:
           app: test-app
       spec:
 
-# 但是pod里面有foo: bar这个label了
+# But now the pod has the foo: bar label
 $ kubectl get pod -oyaml |grep "labels:" -A 2
     labels:
       app: test-app
