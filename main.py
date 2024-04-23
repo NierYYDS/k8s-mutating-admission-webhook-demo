@@ -2,10 +2,9 @@ import base64
 import json
 import logging
 import uvicorn
+from typing import Optional
 from fastapi import Body, FastAPI
 from pydantic import BaseModel
-from typing import Optional
-
 
 class Response(BaseModel):
     """webhook response核心payload"""
@@ -29,6 +28,7 @@ app = FastAPI()
 
 @app.get("/")
 async def index():
+    """index page"""
     return {"message": "Hello, this is a pod labeler admissionWebhook!"}
 
 
@@ -69,6 +69,7 @@ async def mutate(req=Body(...)):
 
 
 if __name__ == "__main__":
+    # 启动服务
     logging.basicConfig(level=logging.INFO)
     uvicorn.run(
         app,
